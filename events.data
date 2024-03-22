@@ -1,0 +1,32 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class EventController {
+    private List<Event> events;
+
+    public EventController() {
+        this.events = loadEventsFromFile();
+    }
+
+    // Other methods...
+
+    private List<Event> loadEventsFromFile() {
+        List<Event> loadedEvents = new ArrayList<>();
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("events.data"))) {
+            loadedEvents = (List<Event>) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error loading events from file: " + e.getMessage());
+        }
+        return loadedEvents;
+    }
+
+    private void saveEventsToFile() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("events.data"))) {
+            oos.writeObject(events);
+        } catch (IOException e) {
+            System.out.println("Error saving events to file: " + e.getMessage());
+        }
+    }
+}
